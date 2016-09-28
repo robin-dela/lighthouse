@@ -10,8 +10,9 @@ const VignettePass = require('@superguigui/wagner/src/passes/vignette/VignettePa
 const NoisePass = require('@superguigui/wagner/src/passes/noise/noise');
 
 // Objects
-import Cube from './objects/cube/Cube';
+import Lighthouse from './objects/lighthouse/Lighthouse';
 import Sea from './objects/planes/sea'
+import Island from './objects/island/Island'
 
 export default class WebGL {
   constructor(params) {
@@ -71,7 +72,7 @@ export default class WebGL {
 
   }
   initLights() {
-    this.light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    this.light = new THREE.AmbientLight( 0x404040 );
     this.scene.add( this.light );
 
     this.spotLight = new THREE.SpotLight( 0xffffff, 0.8 );
@@ -89,13 +90,17 @@ export default class WebGL {
     this.scene.add( this.spotLight );
   }
   initObjects() {
-    this.cube = new Cube();
-    this.cube.position.set(0, 0, 0);
-    this.scene.add(this.cube);
+    this.lighthouse = new Lighthouse();
+    this.lighthouse.position.set(0, 0, 0);
+    this.scene.add(this.lighthouse);
 
     this.sea = new Sea();
-    this.cube.position.set(0, 0, 0);
+    this.sea.position.set(0, 0, 0);
     this.scene.add(this.sea);
+
+    this.island = new Island();
+    this.island.position.set(0, 0, 0);
+    this.scene.add(this.island);
   }
   initGUI() {
     this.folder = window.gui.addFolder(this.params.name);
@@ -157,12 +162,13 @@ export default class WebGL {
       this.renderer.render(this.scene, this.camera);
     }
 
-    this.cube.update();
+    this.lighthouse.update();
     this.sea.update();
+    this.island.update();
   }
   rayCast() {
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = this.raycaster.intersectObject(this.cube, true);
+    const intersects = this.raycaster.intersectObject(this.lighthouse, true);
     if (intersects.length > 0) {
       console.log('yo');
     }

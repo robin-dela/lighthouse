@@ -200,7 +200,7 @@ export default class SeaSystem extends THREE.Object3D {
         this.plane_material.uniforms.lightIntensity.value = this.options.intensity
         this.plane_material.uniforms.alphaMap.value = this.options.alphaMap
 
-        this.angle += .01
+        this.angle += 0.01
         this.quat.setFromAxisAngle(this.axis,this.angle);
         this.plane_material.uniforms.lightPosition.value.applyQuaternion(this.quat);
     }

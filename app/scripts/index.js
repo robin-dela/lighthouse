@@ -59,8 +59,8 @@ domReady(() => {
   // WebGL
   webGL = new WebGL({
     device,
-    name: 'EXPERIMENT',
-    postProcessing: true,
+    name: 'Lighthouse',
+    postProcessing: false,
     size: {
       width: window.innerWidth,
       height: window.innerHeight,
