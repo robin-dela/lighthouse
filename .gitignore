@@ -1,0 +1,5 @@
+.DS_Store
+public/build/main.js
+public/build/main.css
+node_modules
+*.log

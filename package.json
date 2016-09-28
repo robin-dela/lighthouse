@@ -1,0 +1,51 @@
+{
+  "name": "threejs-starter",
+  "version": "1.0.0",
+  "description": "THREE.js Starter Kit",
+  "main": "app/index.js",
+  "aliasify": "./aliasifyConfig.js",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "budo app/scripts/index.js:build/main.js --dir ./public --live --open -- -t babelify -g glslify  | node-sass -w app/styles/main.scss -o public/build/",
+    "build": "browserify -t babelify -t stripify -g glslify app/scripts/index.js | uglifyjs -o public/build/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JordanMachado/threejs-starter.git"
+  },
+  "author": "Jordan Machado (http://jojo.ninja)",
+  "license": "MIT",
+  "dependencies": {
+    "@superguigui/wagner": "^0.1.2",
+    "dat-gui": "*",
+    "domready": "^1.0.8",
+    "fast-url-parser": "^1.1.3",
+    "glsl-noise": "*",
+    "gsap": "*",
+    "konami-js": "0.0.2",
+    "node-sass": "^3.10.0",
+    "querystringparser": "^0.1.1",
+    "raf": "*",
+    "three": "0.79.0",
+    "three-obj-loader": "^1.0.2",
+    "three-orbit-controls": "^72.0.0",
+    "ua-device-type": "0.0.4"
+  },
+  "devDependencies": {
+    "aliasify": "^2.0.0",
+    "babel-eslint": "^6.0.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "*",
+    "babel-preset-es2015": "*",
+    "babelify": "*",
+    "browserify": "*",
+    "budo": "*",
+    "lodash.foreach": "^4.2.0",
+    "eslint": "^2.7.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^4.3.0",
+    "glslify": "*",
+    "stripify": "*",
+    "uglifyjs": "*"
+  }
+}
