@@ -6,3 +6,13 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+canvas {
+  transition: background 1s;
+  background: #D6B9AC;
+
+  &.night {
+    transition: background 1s;
+    background: #07324f;
+  }
+}

@@ -25,6 +25,8 @@ export default class SeaSystem extends THREE.Object3D {
             alphaMap: this.o.alphaMap
         }
 
+        this.night = false;
+
         this.lightOptions = {
             position: {
                 x: this.o.position.x,
@@ -181,6 +183,18 @@ export default class SeaSystem extends THREE.Object3D {
         this.add(this.plane_mesh)
     }
 
+    switchMode(night) {
+      this.night = night;
+      if (this.night) {
+        TweenMax.to(this.options, 1, {minIntensity: 0.01, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {intensity: 5.0, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {wireframe_color: '#274948', ease: Power2.easeOut})
+      } else {
+        TweenMax.to(this.options, 1, {minIntensity: 0.3, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {intensity: 2.0, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {wireframe_color: '#427D7C', ease: Power2.easeOut})
+      }
+    }
 
     update(frame) {
         this.plane_material.needsUpdate = true
@@ -200,7 +214,12 @@ export default class SeaSystem extends THREE.Object3D {
         this.plane_material.uniforms.lightIntensity.value = this.options.intensity
         this.plane_material.uniforms.alphaMap.value = this.options.alphaMap
 
-        this.angle += 0.01
+        if (this.night) {
+          this.angle += 0.01
+        } else {
+          this.angle += 0.0001
+        }
+
         this.quat.setFromAxisAngle(this.axis,this.angle);
         this.plane_material.uniforms.lightPosition.value.applyQuaternion(this.quat);
     }

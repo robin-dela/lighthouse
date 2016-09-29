@@ -23,6 +23,7 @@
     "glsl-noise": "*",
     "gsap": "*",
     "konami-js": "0.0.2",
+    "lodash.foreach": "^4.5.0",
     "node-sass": "^3.10.0",
     "querystringparser": "^0.1.1",
     "raf": "*",

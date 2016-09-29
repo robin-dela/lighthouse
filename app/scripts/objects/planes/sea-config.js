@@ -17,9 +17,9 @@ module.exports = {
         "position": {
           "x": 20.0,
           "y": 10.0,
-          "z": 1.0
+          "z": 35.0
         },
-        "minIntensity": 0.2,
+        "minIntensity": 0.3,
         "intensity": 2.0,
         "alphaMap": 0.8
     },

@@ -1,4 +1,5 @@
 import THREE from 'three';
+import 'gsap'
 window.THREE = THREE;
 const OrbitControls = require('three-orbit-controls')(THREE);
 const OBJLoader = require('three-obj-loader')(THREE);
@@ -8,6 +9,7 @@ import WAGNER from '@superguigui/wagner';
 const FXAAPass = require('@superguigui/wagner/src/passes/fxaa/FXAAPASS');
 const VignettePass = require('@superguigui/wagner/src/passes/vignette/VignettePass');
 const NoisePass = require('@superguigui/wagner/src/passes/noise/noise');
+const BloomPass = require('@superguigui/wagner/src/passes/bloom/MultiPassBloomPass');
 
 // Objects
 import Lighthouse from './objects/lighthouse/Lighthouse';
@@ -36,9 +38,9 @@ export default class WebGL {
     this.camera.position.z = 50;
     this.camera.position.y = 6;
 
-    this.renderer = new THREE.WebGLRenderer({antialias : true});
+    this.renderer = new THREE.WebGLRenderer({antialias : true, alpha: true});
     this.renderer.setSize(params.size.width, params.size.height);
-    this.renderer.setClearColor(0xD6B9AC);
+    this.renderer.setClearColor(0xD6B9AC, 0);
 
 
     this.composer = null;
@@ -50,6 +52,12 @@ export default class WebGL {
     }
 
     if (window.DEBUG || window.DEVMODE) this.initGUI();
+
+    this.night = false;
+    document.body.addEventListener("click", () => {
+      this.night = !this.night;
+      this.switchMode();
+    })
 
   }
   initPostprocessing() {
@@ -70,10 +78,13 @@ export default class WebGL {
     });
     this.passes.push(this.vignettePass);
 
+    this.bloomPass = new BloomPass();
+    this.passes.push(this.bloomPass);
+
   }
   initLights() {
     this.light = new THREE.AmbientLight( 0x404040 );
-    this.scene.add( this.light );
+    // this.scene.add( this.light );
 
     this.spotLight = new THREE.SpotLight( 0xffffff, 0.8 );
     this.spotLight.position.set( 100, 100, 100 );
@@ -89,6 +100,7 @@ export default class WebGL {
 
     this.scene.add( this.spotLight );
   }
+
   initObjects() {
     this.lighthouse = new Lighthouse();
     this.lighthouse.position.set(0, 0, 0);
@@ -102,6 +114,13 @@ export default class WebGL {
     this.island.position.set(0, 0, 0);
     this.scene.add(this.island);
   }
+
+  switchMode() {
+    document.querySelector('canvas').classList.toggle('night');
+    this.sea.switchMode(this.night);
+    this.lighthouse.switchMode(this.night);
+  }
+
   initGUI() {
     this.folder = window.gui.addFolder(this.params.name);
     this.folder.add(this.params, 'postProcessing');
@@ -144,6 +163,7 @@ export default class WebGL {
     }
     this.folder.close();
   }
+
   render() {
     if (this.params.postProcessing) {
       this.composer.reset();
