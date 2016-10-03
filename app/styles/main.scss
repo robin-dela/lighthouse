@@ -16,3 +16,98 @@ canvas {
     background: #07324f;
   }
 }
+
+body {
+  background-color: #1E314F;
+  font-family: 'Helvetica Rounded', 'Arial Rounded MT Bold','Montserrat', sans-serif;
+  color: #fff;
+}
+
+.toggleWrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  overflow: hidden;
+  transform: scale(0.8);
+
+  input {
+    position: absolute;
+    left: -99em;
+  }
+}
+
+.toggle {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  width: 90px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 90px - 6;
+  transition: background-color 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.toggle__handler {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  top: 3px;
+  left: 3px;
+  width: 50px - 6;
+  height: 50px - 6;
+  background: radial-gradient(ellipse at center, #ffe5b5 23%,#eaba7e 100%);
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform:  rotate(-45deg);
+
+  .crater {
+    position: absolute;
+    background-color: #D6B9AC;
+    opacity: 0;
+    transition: opacity 400ms ease-in-out;
+    border-radius: 100%;
+  }
+
+  .crater--1 {
+    top: 18px;
+    left: 10px;
+    width: 4px;
+    height: 4px;
+  }
+
+  .crater--2 {
+    top: 28px;
+    left: 22px;
+    width: 6px;
+    height: 6px;
+  }
+
+  .crater--3 {
+    top: 10px;
+    left: 25px;
+    width: 8px;
+    height: 8px;
+  }
+}
+
+input:checked {
+  + .toggle {
+    background-color: rgba(116, 157, 214, 0.54);
+
+    &:before {
+      color: #749ED7;
+    }
+
+    &:after {
+      color: #ffffff;
+    }
+
+    .toggle__handler {
+      background: radial-gradient(ellipse at center, #ffe5b5 23%,#ffe5b5 100%);;
+      transform: translate3d(40px, 0, 0) rotate(0);
+
+      .crater { opacity: 1; }
+    }
+  }
+}

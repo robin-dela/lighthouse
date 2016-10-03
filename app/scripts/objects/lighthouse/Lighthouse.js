@@ -77,35 +77,30 @@ export default class Lighthouse extends THREE.Object3D {
     this.sphereBulbSphere.position.y = 13.5;
     this.add( this.sphereBulbSphere );
 
-    this.spotLight = new THREE.SpotLight( 0xdec508, 10, 100, 0.14 );
+    this.spotLight = new THREE.SpotLight( 0xdec508, 10, 100, 0.4 );
     this.spotLight.target = this.sphereBulbSphere;
     this.spotLight.shadowMapVisible = true;
     this.add( this.spotLight );
 
-    // this.testgeometry = new THREE.CylinderGeometry( 0, 2.5, 15, 24, 24, true );
-    // this.testmaterial = new THREE.PointsMaterial ({
-    //     size: 0.4,
-    //     color: 0xdec508,
-    //     transparent: true,
-    //     opacity: 0.2,
-    //     map: THREE.ImageUtils.loadTexture('./assets/flare.png'),
-    //     blending: THREE.AdditiveBlending,
-    //     depthTest: true,
-    //     side: THREE.DoubleSide,
-    // });
-    //
-    // this.particles = new THREE.Points(this.testgeometry, this.testmaterial);
-    // this.particles.position.y = 13.5;
-    // this.particles.geometry.translate( 0, -15/2, 0 );
-    // this.particles.rotation.x = Math.PI / 2;
-    // this.particles.rotation.z = Math.PI / 1.2;
-    // this.add(this.particles);
-
+    this.textureFlare0 = THREE.ImageUtils.loadTexture("./assets/lensflare0.png");
+    this.textureFlare3 = THREE.ImageUtils.loadTexture("./assets/lensflare3.png");
+    this.flareColor = new THREE.Color(0xFFFCEE);
+    this.lensFlare = new THREE.LensFlare(this.textureFlare0, 1700, 0.0, THREE.AdditiveBlending, this.flareColor);
+    this.lensFlare.add(this.textureFlare0, 60, 0.6, THREE.AdditiveBlending);
+    this.lensFlare.add(this.textureFlare0, 70, 0.7, THREE.AdditiveBlending);
+    this.lensFlare.add(this.textureFlare0, 120, 0.9, THREE.AdditiveBlending);
+    this.lensFlare.add(this.textureFlare0, 70, 1.0, THREE.AdditiveBlending);
+    this.lensFlare.position.copy(this.sphereBulbSphere.position);
+    // this.add(this.lensFlare);
   }
 
   switchMode(night) {
     this.night = night;
-    console.log(night);
+    if (this.night) {
+      TweenMax.to(this.spotLight, 1, {intensity: 100, ease: Power2.easeOut})
+    } else {
+      TweenMax.to(this.spotLight, 0.5, {intensity: 10, ease: Power2.easeOut})
+    }
   }
 
   addGUI(folder) {
@@ -114,22 +109,9 @@ export default class Lighthouse extends THREE.Object3D {
   update() {
 
     if (this.night) {
-      // this.particles.rotation.z -= 0.01;
       this.sphereBulbSphere.rotation.y += 0.01;
     } else {
-      // this.particles.rotation.z -= 0.0001;
       this.sphereBulbSphere.rotation.y += 0.0001;
     }
-
-
-    // forEach(this.particles.geometry.vertices, function(particle){
-    //   var dX, dY, dZ;
-    //   dX = Math.random() * 0.04 - 0.02;
-    //   dY = Math.random() * 0.04 - 0.02;
-    //   dZ = Math.random() * 0.04 - 0.02;
-    //
-    //   particle.add(new THREE.Vector3(dX, dY, dZ));
-    // });
-    // this.particles.geometry.verticesNeedUpdate = true;
   }
 }

@@ -4,7 +4,7 @@ const glslify = require('glslify');
 export default class SeaSystem extends THREE.Object3D {
     constructor(options) {
         super()
-        this.gui = gui
+        // this.gui = gui
         this.o = options
 
         this.clock = new THREE.Clock(true)
@@ -42,36 +42,40 @@ export default class SeaSystem extends THREE.Object3D {
 
         this.init()
 
-        this.gui.values = {}
-        this.fieldConfig = gui.addFolder(this.o.name)
+        // this.initGui()
+    }
+
+    initGui() {
+      this.gui.values = {}
+      this.fieldConfig = gui.addFolder(this.o.name)
 
 
-        //Mountain
-        this.fieldConfig.add(this.options, 'speed', -5, 5).step(0.01)
-        this.fieldConfig.add(this.options, 'perlin_passes', 1, 3).step(1)
-        this.fieldConfig.add(this.options, 'elevation', -10, 50).step(0.1)
-        this.fieldConfig.add(this.options, 'noise_range', -10, 10).step(0.01)
-        this.fieldConfig.add(this.options, 'sombrero_amplitude', -5, 5).step(0.1)
-        this.fieldConfig.add(this.options, 'sombrero_frequency', 0, 100).step(0.1)
-        this.fieldConfig.add(this.options, 'alphaMap', 0, 1).step(0.1)
-        this.fieldConfig.addColor(this.options, 'wireframe_color')
-        this.gui.values.wireframe = this.fieldConfig.add(this.options, 'wireframe')
-        this.gui.values.floor_visible = this.fieldConfig.add(this.options, 'floor_visible')
+      //Mountain
+      this.fieldConfig.add(this.options, 'speed', -5, 5).step(0.01)
+      this.fieldConfig.add(this.options, 'perlin_passes', 1, 3).step(1)
+      this.fieldConfig.add(this.options, 'elevation', -10, 50).step(0.1)
+      this.fieldConfig.add(this.options, 'noise_range', -10, 10).step(0.01)
+      this.fieldConfig.add(this.options, 'sombrero_amplitude', -5, 5).step(0.1)
+      this.fieldConfig.add(this.options, 'sombrero_frequency', 0, 100).step(0.1)
+      this.fieldConfig.add(this.options, 'alphaMap', 0, 1).step(0.1)
+      this.fieldConfig.addColor(this.options, 'wireframe_color')
+      this.gui.values.wireframe = this.fieldConfig.add(this.options, 'wireframe')
+      this.gui.values.floor_visible = this.fieldConfig.add(this.options, 'floor_visible')
 
-        //light
-        this.fieldConfig.add(this.lightOptions.position, 'x', -100, 100).step(1)
-        this.fieldConfig.add(this.lightOptions.position, 'y', -100, 100).step(1)
-        this.fieldConfig.add(this.lightOptions.position, 'z', -100, 100).step(1)
-        this.fieldConfig.add(this.options, 'minIntensity', 0, 1).step(0.1)
-        this.fieldConfig.add(this.options, 'intensity', 0, 10).step(1.0)
+      //light
+      this.fieldConfig.add(this.lightOptions.position, 'x', -100, 100).step(1)
+      this.fieldConfig.add(this.lightOptions.position, 'y', -100, 100).step(1)
+      this.fieldConfig.add(this.lightOptions.position, 'z', -100, 100).step(1)
+      this.fieldConfig.add(this.options, 'minIntensity', 0, 1).step(0.1)
+      this.fieldConfig.add(this.options, 'intensity', 0, 10).step(1.0)
 
-        this.gui.values.wireframe.onChange(function(value) {
-            this.plane_material.wireframe = value
-        }.bind(this))
+      this.gui.values.wireframe.onChange(function(value) {
+          this.plane_material.wireframe = value
+      }.bind(this))
 
-        this.gui.values.floor_visible.onChange(function(value) {
-            this.groundMaterial.visible = value
-        }.bind(this))
+      this.gui.values.floor_visible.onChange(function(value) {
+          this.groundMaterial.visible = value
+      }.bind(this))
     }
 
     init() {
@@ -186,13 +190,29 @@ export default class SeaSystem extends THREE.Object3D {
     switchMode(night) {
       this.night = night;
       if (this.night) {
-        TweenMax.to(this.options, 1, {minIntensity: 0.01, ease: Power2.easeOut})
-        TweenMax.to(this.options, 1, {intensity: 5.0, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {minIntensity: 0.1, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {intensity: 6.0, ease: Power2.easeOut})
         TweenMax.to(this.options, 1, {wireframe_color: '#274948', ease: Power2.easeOut})
+
+        // TweenMax.to(this.options, 1, {speed: 1.5, ease: Power2.easeOut})
+        this.options.speed = 1.5;
+        TweenMax.to(this.options, 1, {elevation: 0.3, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {noise_range: 0.8, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {sombrero_amplitude: 0.4, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {sombrero_frequency: 11.0, ease: Power2.easeOut})
+
       } else {
-        TweenMax.to(this.options, 1, {minIntensity: 0.3, ease: Power2.easeOut})
-        TweenMax.to(this.options, 1, {intensity: 2.0, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {minIntensity: 0.6, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {intensity: 3.0, ease: Power2.easeOut})
         TweenMax.to(this.options, 1, {wireframe_color: '#427D7C', ease: Power2.easeOut})
+
+        // TweenMax.to(this.options, 1, {speed: 1.0, ease: Power2.easeOut})
+        this.options.speed = 1.0;
+
+        TweenMax.to(this.options, 1, {elevation: 0.2, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {noise_range: 0.8, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {sombrero_amplitude: 0.0, ease: Power2.easeOut})
+        TweenMax.to(this.options, 1, {sombrero_frequency: 1.0, ease: Power2.easeOut})
       }
     }
 
@@ -216,8 +236,16 @@ export default class SeaSystem extends THREE.Object3D {
 
         if (this.night) {
           this.angle += 0.01
+
+           if (this.lightOptions.position.z >= 35.0) {
+               this.lightOptions.position.z -= 1.0
+           }
+
         } else {
           this.angle += 0.0001
+          if (this.lightOptions.position.z <= 100.0) {
+              this.lightOptions.position.z += 1.0
+          }
         }
 
         this.quat.setFromAxisAngle(this.axis,this.angle);

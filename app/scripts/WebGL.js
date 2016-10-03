@@ -28,9 +28,16 @@ export default class WebGL {
       controls: params.controls || false,
     };
 
-    this.mouse = new THREE.Vector2();
-    this.originalMouse = new THREE.Vector2();
-    this.raycaster = new THREE.Raycaster();
+    this.mouse ={
+      x:0,
+      y:0
+    }
+    this.device = this.params.device;
+    this.divisorX = (this.device == "desktop") ?50:25;
+
+    // this.mouse = new THREE.Vector2();
+    // this.originalMouse = new THREE.Vector2();
+    // this.raycaster = new THREE.Raycaster();
 
     this.scene = new THREE.Scene();
 
@@ -54,14 +61,22 @@ export default class WebGL {
     if (window.DEBUG || window.DEVMODE) this.initGUI();
 
     this.night = false;
-    document.body.addEventListener("click", () => {
+    document.querySelector('.toggle').addEventListener("click", () => {
       this.night = !this.night;
       this.switchMode();
     })
 
   }
   initPostprocessing() {
-    this.composer = new WAGNER.Composer(this.renderer);
+    this.parameters = {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      format: THREE.RGBAFormat,
+      stencilBuffer: true,
+      useRGBA: true
+    }
+
+    this.composer = new WAGNER.Composer(this.renderer, this.parameters)
     this.composer.setSize(window.innerWidth, window.innerHeight);
     window.composer = this.composer;
 
@@ -84,9 +99,9 @@ export default class WebGL {
   }
   initLights() {
     this.light = new THREE.AmbientLight( 0x404040 );
-    // this.scene.add( this.light );
+    this.scene.add( this.light );
 
-    this.spotLight = new THREE.SpotLight( 0xffffff, 0.8 );
+    this.spotLight = new THREE.SpotLight( 0xffffff, 0.6 );
     this.spotLight.position.set( 100, 100, 100 );
 
     this.spotLight.castShadow = true;
@@ -164,6 +179,11 @@ export default class WebGL {
     this.folder.close();
   }
 
+  mouseMove(x,y) {
+      this.mouse.x = (x - window.innerWidth/2) /this.divisorX;
+      // this.mouse.y = (y - window.innerHeight/2) /this.divisorY;
+  }
+
   render() {
     if (this.params.postProcessing) {
       this.composer.reset();
@@ -181,6 +201,10 @@ export default class WebGL {
     } else {
       this.renderer.render(this.scene, this.camera);
     }
+
+    this.camera.position.x += ( this.mouse.x - this.camera.position.x ) * 0.05;
+    // this.camera.position.y += ( -this.mouse.y - this.camera.position.y ) * 0.05;
+    this.camera.lookAt( this.scene.position );
 
     this.lighthouse.update();
     this.sea.update();
@@ -217,21 +241,21 @@ export default class WebGL {
     console.log('keyUp');
   }
   click(x, y, time) {
-    if (!this.params.mouse) return;
-    console.log('click');
-    this.originalMouse.x = x;
-    this.originalMouse.y = y;
-    this.mouse.x = (x / window.innerWidth - 0.5) * 2;
-    this.mouse.y = (y / window.innerHeight - 0.5) * 2;
+    // if (!this.params.mouse) return;
+    // console.log('click');
+    // this.originalMouse.x = x;
+    // this.originalMouse.y = y;
+    // this.mouse.x = (x / window.innerWidth - 0.5) * 2;
+    // this.mouse.y = (y / window.innerHeight - 0.5) * 2;
   }
-  mouseMove(x, y, ime) {
-    if (!this.params.mouse) return;
-    console.log('mousemove');
-    this.originalMouse.x = x;
-    this.originalMouse.y = y;
-    this.mouse.x = (x / window.innerWidth - 0.5) * 2;
-    this.mouse.y = (y / window.innerHeight - 0.5) * 2;
-  }
+  // mouseMove(x, y, ime) {
+  //   if (!this.params.mouse) return;
+  //   console.log('mousemove');
+  //   this.originalMouse.x = x;
+  //   this.originalMouse.y = y;
+  //   this.mouse.x = (x / window.innerWidth - 0.5) * 2;
+  //   this.mouse.y = (y / window.innerHeight - 0.5) * 2;
+  // }
   touchStart() {
     if (!this.params.touch) return;
     console.log('touchstart');

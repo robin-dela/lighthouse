@@ -7,7 +7,7 @@ import dat from 'dat-gui';
 import 'gsap';
 
 // Vars
-window.DEBUG = true;
+window.DEBUG = false;
 let device;
 let webGL;
 
@@ -66,7 +66,7 @@ domReady(() => {
       height: window.innerHeight,
     },
     keyboard: false,
-    mouse: false,
+    mouse: true,
     controls: false,
   });
   document.body.appendChild(webGL.renderer.domElement);
